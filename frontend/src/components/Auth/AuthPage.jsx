@@ -246,7 +246,7 @@ export default function AuthPage() {
                     <div className="text sign-in"><h2>Welcome</h2><p>Riphah International University</p></div>
                     <div className="img sign-in">
                         <div className="brand-visual">
-                            <span className="brand-icon">🕯️</span>
+                            <img src="/riphah_logo.png" alt="Riphah" className="brand-logo" />
                             <span className="brand-name">راہنما</span>
                             <span className="brand-sub">AI Assistant</span>
                         </div>
@@ -255,7 +255,7 @@ export default function AuthPage() {
                 <div className="col align-items-center flex-col">
                     <div className="img sign-up">
                         <div className="brand-visual">
-                            <span className="brand-icon">🕯️</span>
+                            <img src="/riphah_logo.png" alt="Riphah" className="brand-logo" />
                             <span className="brand-name">راہنما</span>
                             <span className="brand-sub">AI Assistant</span>
                         </div>

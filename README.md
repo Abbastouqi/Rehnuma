@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo.png" width="130" alt="Riphah International University"/>
+  <img src="assets/riphah_logo.png" width="130" alt="Riphah International University"/>
 </p>
 
 <h1 align="center">راہنما · Rahnuma</h1>

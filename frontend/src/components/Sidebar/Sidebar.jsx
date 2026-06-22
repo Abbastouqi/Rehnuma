@@ -194,8 +194,8 @@ export default function Sidebar() {
       <div className="flex items-center justify-between px-3 pt-3 pb-2">
         <button onClick={handleNewChat}
           className="flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-white/5 transition flex-1 min-w-0">
-          <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center shrink-0 border border-green-800/50">
-            <span className="text-base">🕯️</span>
+          <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 border border-white/20">
+            <img src="/riphah_logo.png" alt="Riphah" className="w-full h-full object-cover" />
           </div>
           <div className="text-left min-w-0">
             <p className="text-white font-bold text-sm leading-tight" style={{ fontFamily: 'serif' }}>راہنما</p>

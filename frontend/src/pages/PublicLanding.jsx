@@ -39,8 +39,8 @@ export default function PublicLanding() {
       <nav className="flex items-center justify-between px-6 py-4 shrink-0">
         {/* Logo */}
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 bg-black rounded-lg border border-red-900/50 flex items-center justify-center text-lg">
-            🕯️
+          <div className="w-8 h-8 rounded-full overflow-hidden border border-white/20 shrink-0">
+            <img src="/riphah_logo.png" alt="Riphah" className="w-full h-full object-cover" />
           </div>
           <div>
             <span
