@@ -1,0 +1,25 @@
+fastapi==0.115.0
+uvicorn==0.30.6
+sqlalchemy==2.0.35
+python-jose[cryptography]==3.3.0
+bcrypt>=4.0.0
+python-multipart==0.0.9
+httpx==0.25.2
+pydantic==2.9.2
+pydantic-settings==2.5.2
+python-dotenv==1.0.1
+aiosqlite==0.20.0
+pypdf>=4.0.0
+python-docx>=1.1.0
+
+# MongoDB — user profiles, login history, API keys, subscriptions
+motor>=3.4.0
+beanie>=1.24.0
+
+# Email
+aiosmtplib>=3.0.1
+email-validator>=2.1.0
+
+# Vector memory (ChromaDB)
+# Install separately: pip install chromadb
+# First run downloads ~80 MB ONNX embedding model automatically
