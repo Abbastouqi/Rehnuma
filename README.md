@@ -1,8 +1,13 @@
-# راہنما · Rahnuma
+<p align="center">
+  <img src="assets/logo.png" width="130" alt="Riphah International University"/>
+</p>
 
-**AI Assistant Platform — Riphah International University**
-
-A full-stack AI chat platform powered by Qwen3, built for Riphah International University. Features a modern chat interface, OpenAI-compatible API, user management, and an admin dashboard.
+<h1 align="center">راہنما · Rahnuma</h1>
+<p align="center"><strong>AI Assistant Platform — Riphah International University</strong></p>
+<p align="center">
+  A full-stack AI chat platform powered by Qwen3, built for Riphah International University.<br/>
+  Features a modern chat interface, OpenAI-compatible API, user management, and an admin dashboard.
+</p>
 
 ---
 
