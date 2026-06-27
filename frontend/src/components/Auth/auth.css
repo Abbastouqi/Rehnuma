@@ -416,11 +416,19 @@
 
 /* ── Mobile ── */
 
+@keyframes mobileFormIn {
+    from { transform: translateY(50px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+}
+
 @media only screen and (max-width: 768px) {
+
+    /* ─ Background: flat dark, full-screen ─ */
     .auth-wrap::before,
     .auth-wrap.sign-in::before,
     .auth-wrap.sign-up::before {
         height: 100vh;
+        width: 100%;
         border-bottom-right-radius: 0;
         border-top-left-radius: 0;
         z-index: 0;
@@ -428,42 +436,77 @@
         right: 0;
     }
 
-    .auth-wrap .content-row {
-        align-items: flex-start;
+    /* ─ Form row: full height, form panels at bottom ─ */
+    .auth-wrap .row:not(.content-row) {
+        height: 100vh;
+        align-items: flex-end;
+        overflow: visible;
+        position: relative;
     }
 
-    .auth-wrap .content-row .col {
-        background-color: unset;
+    /* ─ Hide ALL form panels by default (display:none is bulletproof) ─ */
+    .auth-wrap .row:not(.content-row) .col {
+        display: none;
     }
 
-    .auth-wrap .col {
+    /* ─ Show ONLY the active panel ─ */
+    .auth-wrap.sign-in .row:not(.content-row) .col.sign-in,
+    .auth-wrap.sign-up .row:not(.content-row) .col.sign-up {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         width: 100%;
-        position: absolute;
-        padding: 2rem;
-        background-color: var(--white);
+        max-height: 85vh;
+        overflow-y: auto;
+        padding: 2rem 1.5rem 3rem;
+        background-color: #f9fafb;
         border-top-left-radius: 2rem;
         border-top-right-radius: 2rem;
-        transform: translateY(100%);
-        transition: 1s ease-in-out;
+        -webkit-overflow-scrolling: touch;
+        animation: mobileFormIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .auth-wrap .row {
-        align-items: flex-end;
-        justify-content: flex-end;
+    /* ─ Branding overlay: show only the active brand, hide inactive ─ */
+    .auth-wrap .content-row {
+        align-items: flex-start;
+        overflow: hidden;
     }
 
+    /* Hide both branding cols by default, show only the active one */
+    .auth-wrap .content-row .col {
+        display: none;
+        width: 100%;
+        background-color: transparent;
+        padding: 2.5rem 1.5rem 1rem;
+        flex-direction: column;
+        align-items: center;
+        transform: none !important;
+        border-radius: 0;
+        overflow: visible;
+    }
+
+    .auth-wrap.sign-in .content-row .col:first-child,
+    .auth-wrap.sign-up .content-row .col:last-child {
+        display: flex;
+    }
+
+    /* ─ Form card: flat on mobile ─ */
     .auth-wrap .form {
         box-shadow: none;
         padding: 0;
+        background: transparent;
         transform: scale(1) !important;
     }
 
     .auth-wrap .form-wrapper {
         padding: 0;
+        width: 100%;
     }
 
+    /* ─ Panel text ─ */
     .auth-wrap .text {
         margin: 0;
+        text-align: center;
     }
 
     .auth-wrap .text p {
@@ -471,29 +514,38 @@
     }
 
     .auth-wrap .text h2 {
-        margin: 0.5rem;
+        margin: 0.5rem 0;
         font-size: 2rem;
-    }
-
-    .auth-wrap.sign-in .col.sign-in,
-    .auth-wrap.sign-up .col.sign-up {
-        transform: translateY(0);
-    }
-
-    .auth-wrap .auth-watermark {
-        display: none;
+        transform: none !important;
     }
 
     .auth-wrap .img .brand-visual {
+        transform: none !important;
         width: auto;
+    }
+
+    /* ─ Branding scale-down ─ */
+    .auth-wrap .auth-watermark {
+        display: none;
     }
 
     .auth-wrap .brand-icon {
         font-size: 3rem;
     }
 
+    .auth-wrap .brand-logo {
+        width: 90px;
+        height: 90px;
+    }
+
     .auth-wrap .brand-name {
         font-size: 2rem;
+    }
+
+    /* ─ Input: prevent iOS auto-zoom (must be ≥16px) ─ */
+    .auth-wrap .input-group input {
+        font-size: 1rem;
+        padding: 0.9rem 3rem;
     }
 }
 
