@@ -36,7 +36,7 @@ export default function PublicLanding() {
     <div className="min-h-screen bg-[#0d0e1a] flex flex-col">
 
       {/* Top nav */}
-      <nav className="flex items-center justify-between px-6 py-4 shrink-0">
+      <nav className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 shrink-0">
         {/* Logo */}
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-full overflow-hidden border border-white/20 shrink-0">
@@ -56,13 +56,13 @@ export default function PublicLanding() {
         </div>
 
         {/* Nav right */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           <button
             onClick={() => {
               sessionStorage.setItem('redirectAfterLogin', '/api-platform')
               navigate('/login')
             }}
-            className="text-gray-300 text-sm font-medium px-4 py-2 rounded-full hover:bg-white/8 transition flex items-center gap-1.5"
+            className="hidden sm:flex text-gray-300 text-sm font-medium px-4 py-2 rounded-full hover:bg-white/8 transition items-center gap-1.5"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24">
               <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
@@ -72,13 +72,13 @@ export default function PublicLanding() {
           </button>
           <Link
             to="/login"
-            className="text-white text-sm font-medium px-4 py-2 rounded-full border border-white/20 hover:bg-white/10 transition"
+            className="text-white text-xs sm:text-sm font-medium px-3 sm:px-4 py-2 rounded-full border border-white/20 hover:bg-white/10 transition"
           >
             Log in
           </Link>
           <Link
             to="/register"
-            className="text-black text-sm font-semibold px-4 py-2 rounded-full bg-white hover:bg-gray-100 transition"
+            className="text-black text-xs sm:text-sm font-semibold px-3 sm:px-4 py-2 rounded-full bg-white hover:bg-gray-100 transition"
           >
             Sign up
           </Link>
@@ -86,8 +86,8 @@ export default function PublicLanding() {
       </nav>
 
       {/* Main centered content */}
-      <div className="flex-1 flex flex-col items-center justify-center px-4 pb-20">
-        <h1 className="text-white text-3xl sm:text-4xl font-semibold mb-8 text-center tracking-tight">
+      <div className="flex-1 flex flex-col items-center justify-center px-4 pb-16 sm:pb-20">
+        <h1 className="text-white text-2xl sm:text-3xl md:text-4xl font-semibold mb-6 sm:mb-8 text-center tracking-tight">
           What's on your mind today?
         </h1>
 

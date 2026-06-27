@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useOutletContext } from 'react-router-dom'
 import { useBot } from '../context/BotContext'
 
 const CATEGORIES = ['All', 'Programming', 'Writing', 'Productivity', 'Research & Analysis', 'Education', 'Lifestyle', 'General']
@@ -17,6 +17,7 @@ const CATEGORY_COLORS = {
 export default function Explore() {
   const { bots, loadBots, selectBot } = useBot()
   const navigate = useNavigate()
+  const { openSidebar } = useOutletContext() || {}
   const [search, setSearch] = useState('')
   const [category, setCategory] = useState('All')
   const [loading, setLoading] = useState(true)
@@ -39,17 +40,27 @@ export default function Explore() {
 
   return (
     <div className="flex-1 overflow-y-auto bg-[#212121] min-h-screen">
-      <div className="max-w-5xl mx-auto px-6 py-8">
+      <div className="max-w-5xl mx-auto px-4 md:px-6 py-6 md:py-8">
 
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-2xl font-bold text-white">Explore GPTs</h1>
-            <p className="text-gray-400 text-sm mt-1">Discover and use custom AI assistants built for specific tasks</p>
+        <div className="flex items-center justify-between mb-6 md:mb-8">
+          <div className="flex items-center gap-3">
+            {/* Mobile hamburger */}
+            <button onClick={openSidebar}
+              className="md:hidden text-gray-400 hover:text-white p-1.5 rounded-lg hover:bg-white/10 transition shrink-0"
+              aria-label="Open menu">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"/>
+              </svg>
+            </button>
+            <div>
+              <h1 className="text-xl md:text-2xl font-bold text-white">Explore GPTs</h1>
+              <p className="text-gray-400 text-xs md:text-sm mt-0.5">Discover and use custom AI assistants</p>
+            </div>
           </div>
           <button
             onClick={() => navigate('/create')}
-            className="flex items-center gap-2 bg-white text-black text-sm font-semibold px-4 py-2 rounded-xl hover:bg-gray-100 transition"
+            className="flex items-center gap-2 bg-white text-black text-xs sm:text-sm font-semibold px-3 sm:px-4 py-2 rounded-xl hover:bg-gray-100 transition shrink-0"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24">
               <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 5v14M5 12h14"/>
@@ -72,13 +83,13 @@ export default function Explore() {
           />
         </div>
 
-        {/* Category pills */}
-        <div className="flex gap-2 flex-wrap mb-8">
+        {/* Category pills — scrollable on mobile */}
+        <div className="flex gap-2 overflow-x-auto pb-2 mb-6 md:mb-8 md:flex-wrap scrollbar-none" style={{ scrollbarWidth: 'none' }}>
           {CATEGORIES.map(c => (
             <button
               key={c}
               onClick={() => setCategory(c)}
-              className={`px-4 py-1.5 rounded-full text-sm font-medium transition border ${
+              className={`px-4 py-1.5 rounded-full text-sm font-medium transition border whitespace-nowrap shrink-0 ${
                 category === c
                   ? 'bg-white text-black border-white'
                   : 'bg-transparent text-gray-400 border-white/15 hover:border-white/30 hover:text-white'

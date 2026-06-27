@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
+import { useOutletContext } from 'react-router-dom'
 import api from '../services/api'
 
 function TabBtn({ active, onClick, children }) {
@@ -151,11 +152,22 @@ function ProfileTab() {
 
 export default function Settings() {
   const [tab, setTab] = useState('profile')
+  const { openSidebar } = useOutletContext() || {}
 
   return (
     <div className="flex flex-col h-full bg-[#212121] overflow-y-auto">
-      <div className="max-w-3xl mx-auto w-full px-6 py-8">
-        <h1 className="text-white text-2xl font-bold mb-6">Settings</h1>
+      <div className="max-w-3xl mx-auto w-full px-4 md:px-6 py-6 md:py-8">
+        <div className="flex items-center gap-3 mb-6">
+          {/* Mobile hamburger */}
+          <button onClick={openSidebar}
+            className="md:hidden text-gray-400 hover:text-white p-1.5 rounded-lg hover:bg-white/10 transition shrink-0"
+            aria-label="Open menu">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+          </button>
+          <h1 className="text-white text-xl md:text-2xl font-bold">Settings</h1>
+        </div>
 
         {/* Tabs */}
         <div className="flex gap-1 mb-8 border-b border-white/8 pb-2">

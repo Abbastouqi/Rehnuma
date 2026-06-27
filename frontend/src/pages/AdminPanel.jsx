@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useOutletContext } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
 
@@ -26,6 +26,7 @@ function StatCard({ label, value, icon, color }) {
 export default function AdminPanel() {
   const { user } = useAuth()
   const navigate = useNavigate()
+  const { openSidebar } = useOutletContext() || {}
   const [tab, setTab] = useState('Overview')
   const [stats, setStats] = useState(null)
   const [users, setUsers] = useState([])
@@ -109,38 +110,50 @@ export default function AdminPanel() {
 
   return (
     <div className="flex-1 overflow-y-auto bg-[#212121]">
-      <div className="max-w-5xl mx-auto px-6 py-8">
+      <div className="max-w-5xl mx-auto px-4 md:px-6 py-6 md:py-8">
 
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-2xl font-bold text-white">Admin Panel</h1>
-            <p className="text-gray-400 text-sm mt-0.5">Rahnuma · Riphah International University</p>
+        <div className="flex items-center justify-between mb-6 md:mb-8">
+          <div className="flex items-center gap-3">
+            {/* Mobile hamburger */}
+            <button onClick={openSidebar}
+              className="md:hidden text-gray-400 hover:text-white p-1.5 rounded-lg hover:bg-white/10 transition shrink-0"
+              aria-label="Open menu">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"/>
+              </svg>
+            </button>
+            <div>
+              <h1 className="text-xl md:text-2xl font-bold text-white">Admin Panel</h1>
+              <p className="text-gray-400 text-xs md:text-sm mt-0.5">Rahnuma · Riphah International University</p>
+            </div>
           </div>
           <button
             onClick={() => navigate('/chat')}
-            className="flex items-center gap-2 text-gray-400 hover:text-white text-sm transition"
+            className="flex items-center gap-2 text-gray-400 hover:text-white text-sm transition shrink-0"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24">
               <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 12H5M12 5l-7 7 7 7"/>
             </svg>
-            Back to Chat
+            <span className="hidden sm:inline">Back to Chat</span>
           </button>
         </div>
 
-        {/* Tabs */}
-        <div className="flex gap-1 bg-[#2f2f2f] p-1 rounded-xl mb-6 w-fit">
-          {TABS.map(t => (
-            <button
-              key={t}
-              onClick={() => setTab(t)}
-              className={`px-5 py-2 rounded-lg text-sm font-medium transition ${
-                tab === t ? 'bg-white text-black' : 'text-gray-400 hover:text-white'
-              }`}
-            >
-              {t}
-            </button>
-          ))}
+        {/* Tabs — horizontally scrollable on mobile */}
+        <div className="overflow-x-auto mb-6 pb-1 -mx-1 px-1">
+          <div className="flex gap-1 bg-[#2f2f2f] p-1 rounded-xl w-fit min-w-full sm:min-w-0">
+            {TABS.map(t => (
+              <button
+                key={t}
+                onClick={() => setTab(t)}
+                className={`px-4 sm:px-5 py-2 rounded-lg text-xs sm:text-sm font-medium transition whitespace-nowrap ${
+                  tab === t ? 'bg-white text-black' : 'text-gray-400 hover:text-white'
+                }`}
+              >
+                {t}
+              </button>
+            ))}
+          </div>
         </div>
 
         {error && (
@@ -172,15 +185,16 @@ export default function AdminPanel() {
         {/* Users */}
         {!loading && tab === 'Users' && (
           <div className="bg-[#2f2f2f] rounded-2xl border border-white/10 overflow-hidden">
-            <div className="px-5 py-4 border-b border-white/10 flex items-center justify-between">
+            <div className="px-4 sm:px-5 py-4 border-b border-white/10 flex items-center justify-between">
               <h3 className="text-white font-semibold">Users ({users.length})</h3>
             </div>
-            <div className="divide-y divide-white/5">
+            <div className="overflow-x-auto">
+            <div className="divide-y divide-white/5 min-w-[480px]">
               {users.length === 0 && (
                 <p className="text-gray-500 text-sm text-center py-12">No users found</p>
               )}
               {users.map(u => (
-                <div key={u.id} className="flex items-center gap-4 px-5 py-3 hover:bg-white/3 transition">
+                <div key={u.id} className="flex items-center gap-3 px-4 sm:px-5 py-3 hover:bg-white/3 transition">
                   <div className="w-8 h-8 rounded-full bg-gradient-to-br from-red-700 to-yellow-600 flex items-center justify-center text-white text-xs font-bold shrink-0">
                     {u.username[0].toUpperCase()}
                   </div>
@@ -232,6 +246,7 @@ export default function AdminPanel() {
                   )}
                 </div>
               ))}
+            </div>
             </div>
           </div>
         )}

@@ -296,7 +296,7 @@ function UserBubble({ message, msgIndex }) {
 
   return (
     <div className="flex justify-end mb-6 px-4 group msg-animate">
-      <div className="max-w-[75%] flex flex-col items-end gap-1">
+      <div className="max-w-[88%] sm:max-w-[75%] flex flex-col items-end gap-1">
         {doc && (
           <div className="flex items-center gap-1.5 text-xs text-amber-400/80 bg-amber-500/10 border border-amber-500/20 rounded-lg px-2.5 py-1">
             <span>📎</span>

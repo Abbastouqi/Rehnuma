@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useOutletContext } from 'react-router-dom'
 import api from '../services/api'
 
 const PLAN_COLORS = {
@@ -114,6 +114,7 @@ function NewKeyModal({ fullKey, name, onClose }) {
 
 export default function APIKeys() {
   const navigate = useNavigate()
+  const { openSidebar } = useOutletContext() || {}
   const [keys, setKeys] = useState([])
   const [usage, setUsage] = useState(null)
   const [limits, setLimits] = useState(null)
@@ -186,22 +187,32 @@ export default function APIKeys() {
         />
       )}
 
-      <div className="max-w-4xl mx-auto px-6 py-8">
+      <div className="max-w-4xl mx-auto px-4 md:px-6 py-6 md:py-8">
 
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-2xl font-bold text-white">API Platform</h1>
-            <p className="text-gray-400 text-sm mt-0.5">Build with Rahnuma · OpenAI-compatible API</p>
+        <div className="flex items-center justify-between mb-6 md:mb-8">
+          <div className="flex items-center gap-3">
+            {/* Mobile hamburger */}
+            <button onClick={openSidebar}
+              className="md:hidden text-gray-400 hover:text-white p-1.5 rounded-lg hover:bg-white/10 transition shrink-0"
+              aria-label="Open menu">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"/>
+              </svg>
+            </button>
+            <div>
+              <h1 className="text-xl md:text-2xl font-bold text-white">API Platform</h1>
+              <p className="text-gray-400 text-xs md:text-sm mt-0.5">Build with Rahnuma · OpenAI-compatible API</p>
+            </div>
           </div>
           <button
             onClick={() => navigate('/chat')}
-            className="flex items-center gap-2 text-gray-400 hover:text-white text-sm transition"
+            className="flex items-center gap-2 text-gray-400 hover:text-white text-sm transition shrink-0"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24">
               <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 12H5M12 5l-7 7 7 7"/>
             </svg>
-            Back to Chat
+            <span className="hidden sm:inline">Back to Chat</span>
           </button>
         </div>
 

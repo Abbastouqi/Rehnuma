@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useOutletContext } from 'react-router-dom'
 import { useChat } from '../../context/ChatContext'
 import { useBot } from '../../context/BotContext'
 import MessageBubble from './MessageBubble'
@@ -17,6 +17,7 @@ export default function ChatWindow() {
   const { activeBot, clearBot } = useBot()
   const { chatId } = useParams()
   const navigate = useNavigate()
+  const { openSidebar } = useOutletContext() || {}
   const bottomRef = useRef(null)
   const [loadingChat, setLoadingChat] = useState(() => !!chatId)
 
@@ -69,20 +70,28 @@ export default function ChatWindow() {
       {/* Top bar — visible when conversation is active */}
       {!isEmpty && (
         <div className="flex items-center justify-between px-4 pt-3 pb-1 shrink-0">
-          {activeBot ? (
-            <div className="flex items-center gap-2">
-              <span className="text-lg">{activeBot.icon}</span>
-              <span className="text-white text-sm font-medium">{activeBot.name}</span>
-              <span className="text-gray-600 text-xs">·</span>
-              <button onClick={clearBot} className="text-gray-500 hover:text-gray-300 text-xs transition">
-                Switch to default
-              </button>
-            </div>
-          ) : (
-            <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2">
+            {/* Mobile hamburger */}
+            <button onClick={openSidebar}
+              className="md:hidden text-gray-400 hover:text-white p-1.5 rounded-lg hover:bg-white/10 transition -ml-1 shrink-0"
+              aria-label="Open menu">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"/>
+              </svg>
+            </button>
+            {activeBot ? (
+              <>
+                <span className="text-lg">{activeBot.icon}</span>
+                <span className="text-white text-sm font-medium">{activeBot.name}</span>
+                <span className="text-gray-600 text-xs">·</span>
+                <button onClick={clearBot} className="text-gray-500 hover:text-gray-300 text-xs transition">
+                  Switch to default
+                </button>
+              </>
+            ) : (
               <span className="text-white text-sm font-medium" style={{ fontFamily: 'serif' }}>راہنما</span>
-            </div>
-          )}
+            )}
+          </div>
           <button
             onClick={handleNewChat}
             disabled={streaming}
@@ -103,7 +112,18 @@ export default function ChatWindow() {
             <div className="w-6 h-6 border-2 border-white/20 border-t-white/70 rounded-full animate-spin"/>
           </div>
         ) : isEmpty ? (
-          <div className="h-full flex flex-col items-center justify-center px-4 pb-10">
+          <div className="h-full flex flex-col">
+            {/* Mobile header for empty state */}
+            <div className="md:hidden flex items-center px-4 pt-3 pb-1 shrink-0">
+              <button onClick={openSidebar}
+                className="text-gray-400 hover:text-white p-1.5 rounded-lg hover:bg-white/10 transition"
+                aria-label="Open menu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+              </button>
+            </div>
+          <div className="flex-1 flex flex-col items-center justify-center px-4 pb-10">
             {activeBot ? (
               <>
                 <div className="w-16 h-16 rounded-2xl bg-[#2f2f2f] border border-white/10 flex items-center justify-center text-4xl mb-4 shadow-lg">
@@ -124,7 +144,7 @@ export default function ChatWindow() {
                 <p className="text-gray-500 text-sm mb-8">Riphah International University · AI Assistant</p>
               </>
             )}
-            <div className="grid grid-cols-2 gap-2.5 w-full max-w-xl">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 w-full max-w-xl">
               {starters.map((s) => (
                 <button
                   key={s.text}
@@ -136,6 +156,7 @@ export default function ChatWindow() {
                 </button>
               ))}
             </div>
+          </div>
           </div>
         ) : (
           <div className="max-w-3xl mx-auto py-6 pb-4">

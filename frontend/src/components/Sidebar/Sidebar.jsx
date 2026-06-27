@@ -101,7 +101,7 @@ function ChatRow({ chat, isActive, onClick, onRename, onPin, onArchive, onExport
   )
 }
 
-export default function Sidebar() {
+export default function Sidebar({ onClose = () => {} }) {
   const {
     chats, activeChat, loadChats, selectChat, newChat,
     deleteChat, renameChat, updateChat, exportChat,
@@ -139,8 +139,8 @@ export default function Sidebar() {
     setEditingId(null)
   }
 
-  const handleNewChat = () => { clearBot(); newChat(); navigate('/chat') }
-  const handleSelect = (chat) => { selectChat(chat.id); navigate(`/chat/${chat.id}`) }
+  const handleNewChat = () => { clearBot(); newChat(); navigate('/chat'); onClose() }
+  const handleSelect = (chat) => { selectChat(chat.id); navigate(`/chat/${chat.id}`); onClose() }
 
   const handlePin = (chat) => updateChat(chat.id, { is_pinned: !chat.is_pinned })
   const handleArchive = async (chat) => {
@@ -202,6 +202,13 @@ export default function Sidebar() {
             <p className="text-gray-500 text-[10px] leading-tight truncate">Riphah International</p>
           </div>
         </button>
+        {/* Mobile close button */}
+        <button onClick={onClose} title="Close menu"
+          className="md:hidden text-gray-400 hover:text-white p-2 rounded-lg hover:bg-white/10 transition shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18 6 6 18M6 6l12 12"/>
+          </svg>
+        </button>
         <button onClick={handleNewChat} title="New chat"
           className="text-gray-400 hover:text-white p-2 rounded-lg hover:bg-white/10 transition shrink-0">
           <Icon d="M12 5H7a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" size={17}/>
@@ -234,7 +241,7 @@ export default function Sidebar() {
           { path: '/prompts', label: 'Prompts', icon: 'M4 6h16M4 10h16M4 14h10' },
           { path: '/api-platform', label: 'API Platform', icon: 'M15 7a2 2 0 0 1 2 2m4 0a6 6 0 0 1-7.743 5.743L11 17H9v2H7v2H4a1 1 0 0 1-1-1v-2.586a1 1 0 0 1 .293-.707l5.964-5.964A6 6 0 1 1 21 9z' },
         ].map(({ path, label, icon }) => (
-          <button key={path} onClick={() => navigate(path)}
+          <button key={path} onClick={() => { navigate(path); onClose() }}
             className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition ${
               isPage(path) ? 'bg-green-500/15 text-green-300 border border-green-500/20' : 'text-gray-400 hover:text-white hover:bg-white/5'
             }`}>
