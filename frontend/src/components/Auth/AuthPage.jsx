@@ -42,8 +42,20 @@ export default function AuthPage() {
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
-        document.body.style.overflow = 'hidden'
-        return () => { document.body.style.overflow = '' }
+        // iOS Safari: scroll the focused input into view when the virtual
+        // keyboard opens (visualViewport shrinks but window size does not).
+        const vv = window.visualViewport
+        if (!vv) return
+        const onResize = () => {
+            const el = document.activeElement
+            if (el && el.tagName === 'INPUT') {
+                requestAnimationFrame(() => {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+                })
+            }
+        }
+        vv.addEventListener('resize', onResize)
+        return () => vv.removeEventListener('resize', onResize)
     }, [])
 
     const toggle = () => {

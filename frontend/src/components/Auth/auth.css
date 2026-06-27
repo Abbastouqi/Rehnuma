@@ -421,21 +421,33 @@
 /* ── Mobile ── */
 
 @keyframes mobileFormIn {
-    from { transform: translateY(44px); opacity: 0; }
+    from { transform: translateY(30px); opacity: 0; }
     to   { transform: translateY(0);    opacity: 1; }
 }
 
 @media only screen and (max-width: 768px) {
 
-    /* ─ Deep dark background ─ */
+    /* ─ Scrollable flex-column page — keyboard-aware ─
+       The old layout used height:100vh + overflow:hidden + align-items:flex-end,
+       which made the form inaccessible when the virtual keyboard appeared.
+       Now the page is a natural vertical stack that can scroll.            */
     .auth-wrap {
         background: #080c17;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        height: auto;
+        min-height: 100vh;
+        min-height: 100dvh; /* dynamic viewport height: shrinks on Android keyboard open */
+        display: flex;
+        flex-direction: column;
+        scroll-padding-bottom: 120px; /* keep inputs above keyboard when browser auto-scrolls */
     }
 
-    /* ─ Green ambient glow — top-right ─ */
+    /* ─ Green ambient glow (fixed so it stays during scroll) ─ */
     .auth-wrap::after {
         content: '';
-        position: absolute;
+        position: fixed;
         width: 280px;
         height: 280px;
         border-radius: 50%;
@@ -443,10 +455,10 @@
         top: -110px;
         right: -110px;
         pointer-events: none;
-        z-index: 1;
+        z-index: 0;
     }
 
-    /* ─ Flat dark ::before (no sliding panel) ─ */
+    /* ─ Flat dark background ─ */
     .auth-wrap::before,
     .auth-wrap.sign-in::before,
     .auth-wrap.sign-up::before {
@@ -459,60 +471,99 @@
         background: #080c17;
     }
 
-    /* ─ Decorative accent circles ─ */
+    /* ─ Decorative circles (fixed = stay in viewport during scroll) ─ */
     .auth-deco {
         display: block;
-        position: absolute;
+        position: fixed;
         border-radius: 50%;
         pointer-events: none;
-        z-index: 1;
+        z-index: 0;
     }
     .auth-deco-a {
         width: 100px;
         height: 100px;
         background: rgba(59, 130, 246, 0.1);
-        bottom: 28%;
+        bottom: 200px;
         left: -36px;
     }
     .auth-deco-b {
         width: 56px;
         height: 56px;
         background: rgba(244, 63, 94, 0.13);
-        top: 22%;
+        top: 180px;
         right: 14px;
     }
 
-    /* ─ Form row: full viewport, panels at bottom ─ */
+    /* ─ All rows: remove fixed height so they size to content ─ */
+    .auth-wrap .row {
+        height: auto;
+    }
+
+    /* ─ Content-row: pulled out of absolute overlay, flows first via order ─ */
+    .auth-wrap .content-row {
+        position: static !important; /* override desktop position:absolute */
+        pointer-events: auto;
+        z-index: 2;
+        order: 1;           /* visually first even though second in DOM */
+        width: 100%;
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+
+    .auth-wrap .content-row .col {
+        display: none;
+        width: 100%;
+        background: transparent;
+        padding: 3.5rem 1.5rem 1.25rem;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.15rem;
+        transform: none !important;
+        border-radius: 0;
+        overflow: visible;
+        max-height: none;
+    }
+
+    .auth-wrap.sign-in .content-row .col:first-child,
+    .auth-wrap.sign-up .content-row .col:last-child {
+        display: flex;
+    }
+
+    /* ─ Form row: flows below branding, auto height ─ */
     .auth-wrap .row:not(.content-row) {
-        height: 100vh;
-        align-items: flex-end;
+        order: 2;           /* visually second */
+        height: auto;
+        align-items: flex-start;
         overflow: visible;
         position: relative;
         z-index: 2;
+        flex: 1 0 auto;
     }
 
-    /* ─ Hide ALL form panels ─ */
+    /* ─ Hide all form panels ─ */
     .auth-wrap .row:not(.content-row) .col {
         display: none;
     }
 
-    /* ─ Active form panel: dark frosted glass ─ */
+    /* ─ Active form panel: full natural height, no overflow clipping ─ */
     .auth-wrap.sign-in .row:not(.content-row) .col.sign-in,
     .auth-wrap.sign-up .row:not(.content-row) .col.sign-up {
         display: flex;
         flex-direction: column;
         align-items: stretch;
         width: 100%;
-        max-height: 68vh;
-        overflow-y: auto;
-        padding: 1.75rem 1.5rem 2.5rem;
+        max-height: none;   /* no height cap — page scrolls instead */
+        overflow: visible;
+        padding: 1.75rem 1.5rem 1rem;
+        /* Extra bottom padding keeps the submit button above the keyboard */
+        padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 1.5rem));
+        margin-bottom: 2rem;
         background: rgba(10, 15, 26, 0.86);
         backdrop-filter: blur(28px);
         -webkit-backdrop-filter: blur(28px);
         border-top: 1px solid rgba(255, 255, 255, 0.07);
         border-top-left-radius: 2rem;
         border-top-right-radius: 2rem;
-        -webkit-overflow-scrolling: touch;
         animation: mobileFormIn 0.38s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
         z-index: 3;
@@ -540,14 +591,17 @@
         margin: 0;
     }
 
-    /* ─ Dark inputs ─ */
+    /* ─ Dark inputs; scroll-margin ensures the input + its label stay
+       visible above the keyboard when browser auto-scrolls to focus ─ */
     .auth-wrap .input-group input {
         background-color: #111827 !important;
         border: 1.5px solid #1e2d4a;
         border-radius: 12px;
         color: #e2e8f0;
-        font-size: 1rem;
+        font-size: 1rem;        /* ≥16px prevents iOS auto-zoom */
         padding: 0.9rem 3rem;
+        scroll-margin-top: 16px;
+        scroll-margin-bottom: 100px; /* extra room so button stays accessible */
     }
 
     .auth-wrap .input-group input:focus {
@@ -564,16 +618,16 @@
         color: #3a5070;
     }
 
-    /* ─ Google button: dark ─ */
+    /* ─ Google button: dark themed ─ */
     .auth-wrap .btn-google {
-        background-color: #111827;
+        background-color: #111827 !important;
         border-color: #1e2d4a;
         color: #cbd5e1;
         border-radius: 12px;
         font-size: 0.85rem;
     }
     .auth-wrap .btn-google:hover {
-        background-color: #162032;
+        background-color: #162032 !important;
         box-shadow: none;
     }
 
@@ -618,32 +672,6 @@
         background: rgba(22, 163, 74, 0.08);
         border-color: rgba(22, 163, 74, 0.2);
         color: #4ade80;
-    }
-
-    /* ─ Branding overlay: active col only ─ */
-    .auth-wrap .content-row {
-        align-items: flex-start;
-        overflow: hidden;
-        z-index: 4;
-    }
-
-    .auth-wrap .content-row .col {
-        display: none;
-        width: 100%;
-        background: transparent;
-        padding: 3.25rem 1.5rem 0.5rem;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.15rem;
-        transform: none !important;
-        border-radius: 0;
-        overflow: visible;
-        max-height: none;
-    }
-
-    .auth-wrap.sign-in .content-row .col:first-child,
-    .auth-wrap.sign-up .content-row .col:last-child {
-        display: flex;
     }
 
     /* ─ Welcome / Join with us heading ─ */
