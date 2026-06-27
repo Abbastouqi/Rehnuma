@@ -33,7 +33,7 @@ export default function PublicLanding() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0d0d0d] flex flex-col">
+    <div className="min-h-screen bg-[#0d0e1a] flex flex-col">
 
       {/* Top nav */}
       <nav className="flex items-center justify-between px-6 py-4 shrink-0">
@@ -93,7 +93,7 @@ export default function PublicLanding() {
 
         {/* Input bar */}
         <div className="w-full max-w-2xl">
-          <div className="relative bg-[#1e1e1e] rounded-2xl border border-white/10 hover:border-white/20 focus-within:border-white/25 transition shadow-xl">
+          <div className="relative bg-[#1a1c2e] rounded-2xl border border-white/[0.08] hover:border-white/15 focus-within:border-green-500/40 focus-within:shadow-[0_0_0_3px_rgba(22,163,74,0.08)] transition-all duration-200 shadow-xl">
 
             {/* Attach / plus button */}
             <button

@@ -8,25 +8,45 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background-color: #1a1a2e;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
+  background-color: #0d0e1a;
   color: #e2e8f0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #4a5568;
-  border-radius: 3px;
+  background: #2a2d3e;
+  border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #718096;
+  background: #3a3d52;
 }
 
 /* highlight.js: background handled by our wrapper, not hljs itself */
 .hljs { background: transparent !important; padding: 0 !important; }
+
+/* Smooth message entrance */
+@keyframes msg-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.msg-animate {
+  animation: msg-in 0.2s ease-out both;
+}
+
+/* Smooth fade-in */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.fade-in {
+  animation: fade-in 0.25s ease both;
+}

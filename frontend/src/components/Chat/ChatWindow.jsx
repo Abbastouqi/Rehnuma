@@ -115,8 +115,8 @@ export default function ChatWindow() {
               </>
             ) : (
               <>
-                <div className="w-14 h-14 bg-black rounded-2xl border border-green-800/50 flex items-center justify-center text-2xl mb-4 shadow-lg">
-                  🕯️
+                <div className="w-16 h-16 rounded-full overflow-hidden mb-4 shadow-2xl border-2 border-white/10 ring-2 ring-green-500/20">
+                  <img src="/riphah_logo.png" alt="Riphah" className="w-full h-full object-cover" />
                 </div>
                 <h2 className="text-white text-2xl font-semibold mb-1" style={{ fontFamily: 'serif' }}>
                   راہنما
@@ -124,15 +124,15 @@ export default function ChatWindow() {
                 <p className="text-gray-500 text-sm mb-8">Riphah International University · AI Assistant</p>
               </>
             )}
-            <div className="grid grid-cols-2 gap-3 w-full max-w-xl">
+            <div className="grid grid-cols-2 gap-2.5 w-full max-w-xl">
               {starters.map((s) => (
                 <button
                   key={s.text}
                   onClick={() => handleSend(s.text)}
-                  className="text-left bg-[#1c1e30] hover:bg-[#252840] border border-white/8 hover:border-green-500/25 rounded-xl px-4 py-3 transition"
+                  className="text-left bg-[#1a1c2e] hover:bg-[#22253d] border border-white/[0.07] hover:border-green-500/30 rounded-xl px-4 py-3.5 transition-all duration-150 group shadow-sm hover:shadow-green-500/5 hover:shadow-md"
                 >
-                  <span className="block text-base mb-1">{s.icon}</span>
-                  <span className="text-gray-300 text-sm leading-snug">{s.text}</span>
+                  <span className="block text-base mb-1.5 group-hover:scale-110 transition-transform duration-150 inline-block">{s.icon}</span>
+                  <span className="text-gray-400 group-hover:text-gray-200 text-sm leading-snug transition-colors duration-150">{s.text}</span>
                 </button>
               ))}
             </div>

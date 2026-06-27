@@ -172,7 +172,7 @@ export default function MessageInput({ onSend }) {
         )}
 
         {/* Input box */}
-        <div className="relative bg-[#1c1e30] rounded-2xl border border-white/10 focus-within:border-green-500/40 transition">
+        <div className="relative bg-[#1a1c2e] rounded-2xl border border-white/[0.08] focus-within:border-green-500/40 focus-within:shadow-[0_0_0_3px_rgba(22,163,74,0.08)] transition-all duration-200 shadow-sm">
 
           {/* Left cluster: file attach + web search */}
           <div className="absolute left-2 bottom-2.5 flex items-center gap-0.5">

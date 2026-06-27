@@ -33,7 +33,7 @@ function stripMarkdown(text) {
 }
 
 /* ── copy button ── */
-function CopyButton({ text }) {
+function CopyButton({ text, label = 'Copy code' }) {
   const [copied, setCopied] = useState(false)
   const copy = () => {
     navigator.clipboard?.writeText(text).then(() => {
@@ -43,8 +43,8 @@ function CopyButton({ text }) {
   }
   return (
     <button onClick={copy}
-      className={`flex items-center gap-1 text-[11px] px-2 py-0.5 rounded transition font-sans ${
-        copied ? 'text-green-400' : 'text-gray-500 hover:text-gray-200'
+      className={`flex items-center gap-1 text-[11px] px-2 py-1 rounded-lg transition font-sans ${
+        copied ? 'text-green-400 bg-green-500/10' : 'text-gray-500 hover:text-gray-300 hover:bg-white/5'
       }`}>
       {copied ? (
         <>
@@ -59,7 +59,7 @@ function CopyButton({ text }) {
             <rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" strokeWidth="2"/>
             <path stroke="currentColor" strokeWidth="2" d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
           </svg>
-          Copy code
+          {label}
         </>
       )}
     </button>
@@ -295,7 +295,7 @@ function UserBubble({ message, msgIndex }) {
   }
 
   return (
-    <div className="flex justify-end mb-6 px-4 group">
+    <div className="flex justify-end mb-6 px-4 group msg-animate">
       <div className="max-w-[75%] flex flex-col items-end gap-1">
         {doc && (
           <div className="flex items-center gap-1.5 text-xs text-amber-400/80 bg-amber-500/10 border border-amber-500/20 rounded-lg px-2.5 py-1">
@@ -336,7 +336,7 @@ function UserBubble({ message, msgIndex }) {
         ) : (
           /* ── display mode ── */
           <>
-            <div className="bg-[#1e2035] text-gray-100 px-4 py-3 rounded-2xl rounded-br-sm text-sm leading-relaxed whitespace-pre-wrap break-words">
+            <div className="bg-[#1e2240] text-gray-100 px-4 py-3 rounded-2xl rounded-br-sm text-sm leading-relaxed whitespace-pre-wrap break-words shadow-sm border border-white/[0.06]">
               {message.content}
             </div>
             {/* action row — visible on hover */}
@@ -375,10 +375,10 @@ export default function MessageBubble({ message, msgIndex, botName = null }) {
   const workflowType = doc ? 'document' : botName ? 'bot' : 'general'
 
   return (
-    <div className="flex items-start gap-3 mb-6 px-4">
+    <div className="flex items-start gap-3 mb-7 px-4 group/msg msg-animate">
       {/* Avatar */}
-      <div className="w-7 h-7 bg-green-600 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0 mt-0.5">
-        R
+      <div className="w-7 h-7 rounded-full overflow-hidden shrink-0 mt-0.5 ring-1 ring-white/10 shadow-md">
+        <img src="/riphah_logo.png" alt="R" className="w-full h-full object-cover" />
       </div>
 
       {/* Content */}
@@ -397,15 +397,16 @@ export default function MessageBubble({ message, msgIndex, botName = null }) {
             >
               {normalizeMarkdown(message.content)}
             </ReactMarkdown>
-            <div className="mt-3 flex items-center gap-1 border-t border-white/5 pt-2">
+            <div className="mt-2.5 flex items-center gap-0.5 pt-2 opacity-0 group-hover/msg:opacity-100 transition-opacity duration-150">
+              <CopyButton text={message.content} label="Copy" />
               <ReadAloudButton text={message.content} />
             </div>
           </>
         ) : (
-          <span className="flex gap-1 items-center h-7">
-            <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-            <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-            <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+          <span className="flex gap-[5px] items-center h-7">
+            <span className="w-2 h-2 bg-green-400/80 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+            <span className="w-2 h-2 bg-green-400/60 rounded-full animate-bounce" style={{ animationDelay: '160ms' }} />
+            <span className="w-2 h-2 bg-green-400/40 rounded-full animate-bounce" style={{ animationDelay: '320ms' }} />
           </span>
         )}
       </div>

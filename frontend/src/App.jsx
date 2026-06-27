@@ -53,6 +53,8 @@ function AppRoutes() {
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/auth/google/callback" element={<GoogleCallback />} />
 
+      {/* Legacy / convenience redirects */}
+      <Route path="/bots" element={<Navigate to="/explore" replace />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )

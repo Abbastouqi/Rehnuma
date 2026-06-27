@@ -2,7 +2,8 @@
 
 .auth-wrap {
     --primary-color: #16a34a;
-    --secondary-color: #052e16;
+    --secondary-color: #0a0e1a;
+    --panel-bg: #0d1117;
     --white: #ffffff;
     --gray: #f3f4f6;
     --gray-2: #6b7280;
@@ -10,6 +11,7 @@
     position: relative;
     min-height: 100vh;
     overflow: hidden;
+    background-color: #0d1117;
 }
 
 /* ── Layout ── */
@@ -45,10 +47,10 @@
 
 .auth-wrap .form {
     padding: 1.8rem 1.5rem 1.2rem;
-    background-color: var(--white);
+    background-color: #f9fafb;
     border-radius: 1.5rem;
     width: 100%;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    box-shadow: rgba(0, 0, 0, 0.5) 0px 8px 32px, 0 0 0 1px rgba(255,255,255,0.05);
     transform: scale(0);
     transition: 0.5s ease-in-out;
     transition-delay: 1s;
@@ -94,6 +96,7 @@
 .auth-wrap .input-group input:focus {
     border-color: var(--primary-color);
     background-color: #f0fdf4;
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
 }
 
 /* password show/hide toggle */
@@ -393,10 +396,10 @@
     height: 100vh;
     width: 300vw;
     transform: translate(35%, 0);
-    background-image: linear-gradient(-45deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    background-image: linear-gradient(-45deg, #0f1e14 0%, #0a0e1a 60%, #0d1117 100%);
     transition: 1s ease-in-out;
     z-index: 6;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    box-shadow: rgba(0, 0, 0, 0.6) 0px 5px 30px;
     border-bottom-right-radius: max(50vw, 50vh);
     border-top-left-radius: max(50vw, 50vh);
 }
