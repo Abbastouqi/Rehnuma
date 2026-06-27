@@ -35,3 +35,6 @@ Thumbs.db
 .vscode/
 .idea/
 *.swp
+
+# External / third-party projects cloned alongside this repo
+open-webui/
