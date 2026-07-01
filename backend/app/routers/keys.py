@@ -13,6 +13,7 @@ from app.models.user import User
 from app.models.api_key import APIKey, generate_api_key, PLAN_LIMITS
 from app.models.usage_log import UsageLog
 from app.services.auth import get_current_user
+from app.database import get_db
 
 router = APIRouter(prefix="/api/keys", tags=["api-keys"])
 
@@ -94,9 +95,18 @@ async def list_api_keys(
 
 
 @router.get("/limits")
-async def get_plan_limits(current_user: User = Depends(get_current_user)):
+async def get_plan_limits(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
     plan = getattr(current_user, "plan", "free") or "free"
-    return {"plan": plan, "limits": PLAN_LIMITS.get(plan, PLAN_LIMITS["free"])}
+    user = await db.get(User, current_user.id)
+    return {
+        "plan": plan,
+        "limits": PLAN_LIMITS.get(plan, PLAN_LIMITS["free"]),
+        "credits_balance": getattr(user, "credits_balance", 0) or 0,
+        "total_credits_purchased": getattr(user, "total_credits_purchased", 0) or 0,
+    }
 
 
 @router.get("/usage")
@@ -138,12 +148,14 @@ async def get_usage_stats(
 
     plan = getattr(current_user, "plan", "free") or "free"
     limits = PLAN_LIMITS.get(plan, PLAN_LIMITS["free"])
+    user = await db.get(User, current_user.id)
 
     return {
         "plan": plan,
         "requests_today": total_req_today,
         "requests_month": total_req_month,
         "tokens_month": total_tokens,
+        "credits_balance": getattr(user, "credits_balance", 0) or 0,
         "limits": limits,
         "recent_logs": logs,
     }

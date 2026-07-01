@@ -7,6 +7,7 @@ import Explore from './pages/Explore'
 import Create from './pages/Create'
 import AdminPanel from './pages/AdminPanel'
 import APIKeys from './pages/APIKeys'
+import Billing from './pages/Billing'
 import PublicLanding from './pages/PublicLanding'
 import Prompts from './pages/Prompts'
 import Settings from './pages/Settings'
@@ -45,6 +46,7 @@ function AppRoutes() {
         <Route path="/settings" element={<Settings />} />
         <Route path="/admin" element={<AdminPanel />} />
         <Route path="/api-platform" element={<APIKeys />} />
+        <Route path="/billing" element={<Billing />} />
       </Route>
 
       {/* Auth utility routes — accessible regardless of login state */}

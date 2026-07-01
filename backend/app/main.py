@@ -16,7 +16,9 @@ from app.routers import memory as memory_router
 from app.routers import search as search_router
 from app.routers import keys as keys_router
 from app.routers import v1 as v1_router
+from app.routers import billing as billing_router
 from app.models.prompt import Prompt
+from app.models.payment import CreditPackage
 
 SEED_BOTS = [
     {
@@ -180,6 +182,27 @@ SEED_PROMPTS = [
 ]
 
 
+SEED_PACKAGES = [
+    {"name": "Starter", "description": "Perfect for personal projects and experimentation", "credits": 500_000, "price_usd": 5.00, "is_featured": False, "sort_order": 1},
+    {"name": "Standard", "description": "Great for small teams and growing applications", "credits": 2_000_000, "price_usd": 18.00, "is_featured": True, "sort_order": 2},
+    {"name": "Pro", "description": "Built for production apps with high throughput", "credits": 10_000_000, "price_usd": 80.00, "is_featured": False, "sort_order": 3},
+    {"name": "Enterprise", "description": "Maximum scale for enterprise workloads", "credits": 50_000_000, "price_usd": 350.00, "is_featured": False, "sort_order": 4},
+]
+
+
+async def seed_packages():
+    async with AsyncSessionLocal() as db:
+        for seed in SEED_PACKAGES:
+            existing = await db.execute(select(CreditPackage).where(CreditPackage.name == seed["name"]))
+            if existing.scalar_one_or_none():
+                continue
+            db.add(CreditPackage(**seed))
+        try:
+            await db.commit()
+        except Exception:
+            await db.rollback()
+
+
 async def seed_prompts():
     async with AsyncSessionLocal() as db:
         for p in SEED_PROMPTS:
@@ -207,6 +230,7 @@ async def lifespan(app: FastAPI):
     await seed_admin()
     await seed_bots()
     await seed_prompts()
+    await seed_packages()
     # MongoDB (non-fatal)
     from app.db.mongodb import connect_mongodb
     await connect_mongodb()
@@ -238,6 +262,7 @@ app.include_router(memory_router.router)
 app.include_router(search_router.router)
 app.include_router(keys_router.router)
 app.include_router(v1_router.router)
+app.include_router(billing_router.router)
 
 
 @app.get("/health")

@@ -52,6 +52,16 @@ async def _migrate():
             "CREATE INDEX IF NOT EXISTS idx_api_keys_hash ON api_keys(key_hash)",
             "CREATE INDEX IF NOT EXISTS idx_usage_logs_key ON usage_logs(api_key_id)",
             "CREATE INDEX IF NOT EXISTS idx_usage_logs_user ON usage_logs(user_id)",
+            # Billing & Credits — user credit balance
+            "ALTER TABLE users ADD COLUMN credits_balance INTEGER DEFAULT 100000",
+            "ALTER TABLE users ADD COLUMN total_credits_purchased INTEGER DEFAULT 0",
+            # Billing — credit packages table
+            "CREATE TABLE IF NOT EXISTS credit_packages (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, description TEXT DEFAULT '', credits INTEGER NOT NULL, price_usd REAL NOT NULL, is_active INTEGER DEFAULT 1, is_featured INTEGER DEFAULT 0, sort_order INTEGER DEFAULT 0, created_at DATETIME)",
+            # Billing — transactions table
+            "CREATE TABLE IF NOT EXISTS transactions (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER REFERENCES users(id) ON DELETE CASCADE, package_id INTEGER REFERENCES credit_packages(id) ON DELETE SET NULL, credits INTEGER DEFAULT 0, amount_usd REAL DEFAULT 0.0, status TEXT DEFAULT 'pending', payment_method TEXT DEFAULT 'card', reference TEXT, notes TEXT, created_at DATETIME, updated_at DATETIME)",
+            # Billing — indexes
+            "CREATE INDEX IF NOT EXISTS idx_transactions_user ON transactions(user_id)",
+            "CREATE INDEX IF NOT EXISTS idx_transactions_created ON transactions(created_at)",
         ]
         for sql in migrations:
             try:

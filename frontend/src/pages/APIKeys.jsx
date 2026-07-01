@@ -216,10 +216,10 @@ export default function APIKeys() {
           </button>
         </div>
 
-        {/* Plan banner */}
+        {/* Plan & Credits banner */}
         {limits && (
           <div className="bg-[#1a1b2e] border border-white/8 rounded-2xl p-5 mb-6 flex items-center justify-between gap-4 flex-wrap">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 flex-wrap">
               <span className={`text-xs font-semibold px-3 py-1 rounded-full border uppercase tracking-wide ${PLAN_COLORS[plan]}`}>
                 {plan} plan
               </span>
@@ -227,9 +227,22 @@ export default function APIKeys() {
                 {fmtNum(planLimits.req_day)} req/day · {fmtNum(planLimits.req_month)} req/month · {fmtNum(planLimits.tokens_month)} tokens/month
               </span>
             </div>
-            {plan === 'free' && (
-              <span className="text-gray-600 text-xs">Contact admin to upgrade</span>
-            )}
+            <div className="flex items-center gap-3 shrink-0">
+              {limits.credits_balance !== undefined && (
+                <div className="text-right">
+                  <p className="text-xs text-gray-500">Credits balance</p>
+                  <p className={`text-sm font-bold ${limits.credits_balance < 10000 ? 'text-red-400' : 'text-green-400'}`}>
+                    {fmtNum(limits.credits_balance)}
+                  </p>
+                </div>
+              )}
+              <button
+                onClick={() => navigate('/billing')}
+                className="text-xs bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-xl transition"
+              >
+                Billing
+              </button>
+            </div>
           </div>
         )}
 
@@ -383,7 +396,7 @@ export default function APIKeys() {
             {usage && (
               <>
                 {/* Stat cards */}
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                   {[
                     {
                       label: 'Requests Today',
@@ -406,14 +419,33 @@ export default function APIKeys() {
                       used: usage.tokens_month,
                       color: 'border-purple-500/25',
                     },
+                    {
+                      label: 'Credits Remaining',
+                      value: fmtNum(usage.credits_balance ?? limits?.credits_balance ?? 0),
+                      max: null,
+                      used: 0,
+                      color: (usage.credits_balance ?? limits?.credits_balance ?? 0) < 10000 ? 'border-red-500/25' : 'border-amber-500/25',
+                    },
                   ].map(card => (
                     <div key={card.label} className={`bg-[#1a1b2e] border ${card.color} rounded-2xl p-5`}>
                       <p className="text-gray-400 text-xs mb-2">{card.label}</p>
                       <p className="text-white text-2xl font-bold mb-3">{card.value}</p>
-                      <ProgressBar value={card.used} max={card.max} />
-                      <p className="text-gray-600 text-[10px] mt-1 text-right">
-                        of {fmtNum(card.max)}
-                      </p>
+                      {card.max !== null && (
+                        <>
+                          <ProgressBar value={card.used} max={card.max} />
+                          <p className="text-gray-600 text-[10px] mt-1 text-right">
+                            of {fmtNum(card.max)}
+                          </p>
+                        </>
+                      )}
+                      {card.max === null && (
+                        <button
+                          onClick={() => navigate('/billing')}
+                          className="text-[10px] text-green-400 hover:text-green-300 transition"
+                        >
+                          Buy credits →
+                        </button>
+                      )}
                     </div>
                   ))}
                 </div>

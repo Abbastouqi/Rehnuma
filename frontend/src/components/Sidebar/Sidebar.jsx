@@ -240,6 +240,7 @@ export default function Sidebar({ onClose = () => {} }) {
           { path: '/explore', label: 'Explore GPTs', icon: 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 0v20M2 12h20' },
           { path: '/prompts', label: 'Prompts', icon: 'M4 6h16M4 10h16M4 14h10' },
           { path: '/api-platform', label: 'API Platform', icon: 'M15 7a2 2 0 0 1 2 2m4 0a6 6 0 0 1-7.743 5.743L11 17H9v2H7v2H4a1 1 0 0 1-1-1v-2.586a1 1 0 0 1 .293-.707l5.964-5.964A6 6 0 1 1 21 9z' },
+          { path: '/billing', label: 'Billing', icon: 'M21 4H3a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zM1 10h22' },
         ].map(({ path, label, icon }) => (
           <button key={path} onClick={() => { navigate(path); onClose() }}
             className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition ${
@@ -369,6 +370,11 @@ export default function Sidebar({ onClose = () => {} }) {
                 className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-gray-300 hover:bg-white/8 transition">
                 <Icon d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" size={14}/>
                 Settings
+              </button>
+              <button onClick={() => { navigate('/billing'); setUserMenuOpen(false) }}
+                className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-gray-300 hover:bg-white/8 transition">
+                <Icon d="M21 4H3a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zM1 10h22" size={14}/>
+                Billing
               </button>
               {user?.role === 'admin' && (
                 <button onClick={() => { navigate('/admin'); setUserMenuOpen(false) }}

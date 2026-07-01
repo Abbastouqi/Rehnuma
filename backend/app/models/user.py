@@ -1,4 +1,4 @@
-from sqlalchemy import String, Boolean, DateTime
+from sqlalchemy import String, Boolean, DateTime, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime, timezone
 from app.database import Base
@@ -25,6 +25,9 @@ class User(Base):
     profile_picture: Mapped[str | None] = mapped_column(String(500), nullable=True, default=None)
     # API Platform plan
     plan: Mapped[str] = mapped_column(String(20), default="free", server_default="free")
+    # Credits (1 credit = 1 token). Free users start with PACKAGE_FREE_CREDITS on signup.
+    credits_balance: Mapped[int] = mapped_column(Integer, default=100_000, server_default="100000")
+    total_credits_purchased: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
 
     created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
 

@@ -44,6 +44,8 @@ async def register(data: UserRegister, db: AsyncSession = Depends(get_db)):
         is_verified=False,
         verification_token=token,
         verification_expires=expires,
+        credits_balance=100_000,   # signup bonus
+        total_credits_purchased=0,
     )
     db.add(user)
     try:
@@ -52,6 +54,23 @@ async def register(data: UserRegister, db: AsyncSession = Depends(get_db)):
     except IntegrityError:
         await db.rollback()
         raise HTTPException(status_code=400, detail="Username or email already in use")
+
+    # Record the signup bonus as a transaction
+    try:
+        from app.models.payment import Transaction
+        txn = Transaction(
+            user_id=user.id,
+            package_id=None,
+            credits=100_000,
+            amount_usd=0.0,
+            status="completed",
+            payment_method="signup_bonus",
+            notes="Free signup credits",
+        )
+        db.add(txn)
+        await db.commit()
+    except Exception:
+        pass
 
     # Create MongoDB profile (non-fatal if MongoDB is down)
     try:
